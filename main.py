@@ -1,16 +1,23 @@
 import random as rn
 import string
 
+
 class Picker:
-    lsit_of_ASCII = list(string.printable)
+    list_of_ASCII = list(string.printable)
 
     def __init__(self):
         # Last ASCII signs are not really usefull
-        del self.lsit_of_ASCII[-6:]
+        del self.list_of_ASCII[-6:]
 
     def pick_random(self):
-        random_choice = rn.choice(self.lsit_of_ASCII)
-        self.lsit_of_ASCII.remove(random_choice)
+        try:
+            random_choice = rn.choice(self.list_of_ASCII)
+            self.list_of_ASCII.remove(random_choice)
+        except IndexError:
+            self.list_of_ASCII = list(string.printable)
+            del self.list_of_ASCII[-6:]
+            random_choice = rn.choice(self.list_of_ASCII)
+            self.list_of_ASCII.remove(random_choice)
         return random_choice
 
 
@@ -32,17 +39,33 @@ class Card:
             del list_of_content[-number_of_lines:]
 
     def field(self):
-        print(self.list_of_ascii_uppercase)
-        print(self.list_of_digits)
+        field = []
+        p = Picker()
+        self.list_of_ascii_uppercase.insert(0, "/")
+        for i in range(len(self.list_of_digits)):
+            row = []
+            for j in range(len(self.list_of_ascii_uppercase)):
+                random_choice = p.pick_random()
+                row.append(random_choice)
+            row.append("\n")
+            field.append(row)
+        return field
+
+    def print_card(self):
+        field = self.field()
+
+        print("--"*20)
+        for i in field:
+            row_string = " ".join(i)
+            print(row_string)
 
 
 # class Generator:
 
 
 def main():
-    c = Card()
-    p = Picker()
-    print(c.field())
+    c = Card(1, 1)
+    c.print_card()
 
 if __name__ == '__main__':
     main()
