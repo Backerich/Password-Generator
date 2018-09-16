@@ -22,10 +22,10 @@ class Card:
         self.number_of_lines_horizontal = number_of_lines_horizontal
         self.number_of_lines_vertical = number_of_lines_vertical
 
-        self.list_items(len(string.ascii_uppercase), self.number_of_lines_horizontal, self.list_of_ascii_uppercase)
-        self.list_items(len(string.digits), number_of_lines_vertical, self.list_of_digits)
+        self.rescale_list(len(string.ascii_uppercase), self.number_of_lines_horizontal, self.list_of_ascii_uppercase)
+        self.rescale_list(len(string.digits), number_of_lines_vertical, self.list_of_digits)
 
-    def list_items(self, ascii_number, number_of_lines, list_of_content):
+    def rescale_list(self, ascii_number, number_of_lines, list_of_content):
         if number_of_lines > ascii_number:
             number_of_lines = ascii_number-1
         if number_of_lines != 0:
