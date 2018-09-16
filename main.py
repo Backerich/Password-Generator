@@ -14,10 +14,35 @@ class Picker:
         return random_choice
 
 
+class Card:
+    list_of_ascii_uppercase = list(string.ascii_uppercase)
+    list_of_digits = list(string.digits)
+
+    def __init__(self, number_of_lines_horizontal = 0, number_of_lines_vertical = 0):
+        self.number_of_lines_horizontal = number_of_lines_horizontal
+        self.number_of_lines_vertical = number_of_lines_vertical
+
+        self.list_items(len(string.ascii_uppercase), self.number_of_lines_horizontal, self.list_of_ascii_uppercase)
+        self.list_items(len(string.digits), number_of_lines_vertical, self.list_of_digits)
+
+    def list_items(self, ascii_number, number_of_lines, list_of_content):
+        if number_of_lines > ascii_number:
+            number_of_lines = ascii_number-1
+        if number_of_lines != 0:
+            del list_of_content[-number_of_lines:]
+
+    def field(self):
+        print(self.list_of_ascii_uppercase)
+        print(self.list_of_digits)
+
+
+# class Generator:
+
+
 def main():
+    c = Card()
     p = Picker()
-    print(p.pick_random())
-    print(p.pick_random())
+    print(c.field())
 
 if __name__ == '__main__':
     main()
