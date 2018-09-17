@@ -5,13 +5,6 @@ import sys
 import os
 
 
-def exit():
-    return sys.exit()
-
-def clear():
-    os.system("cls" if os.name == "nt" else "clear")
-
-
 class Picker:
     list_of_ASCII = list(string.printable)
 
@@ -32,10 +25,9 @@ class Picker:
 
 
 class Card:
-    list_of_ascii_uppercase = list(string.ascii_uppercase)
-    list_of_digits = list(string.digits)
-
     def __init__(self, number_of_lines_horizontal = 0, number_of_lines_vertical = 0):
+        self.list_of_ascii_uppercase = list(string.ascii_uppercase)
+        self.list_of_digits = list(string.digits)
         self.number_of_lines_horizontal = number_of_lines_horizontal
         self.number_of_lines_vertical = number_of_lines_vertical
 
@@ -67,16 +59,25 @@ class Card:
         counter = 0
         return field
 
+    # vlt. eher in die CommandLine packen damit besser Logik von Output getrennt ist
     def console_card(self):
         field = self.field()
 
-        print("--"*20)
+        clear()
+        self.draw_line()
         top_row = " ".join(self.list_of_ascii_uppercase)
         print(top_row)
         for i in field:
             row_string = " ".join(i)
             print(row_string)
-        print("--"*20)
+        self.draw_line()
+
+    def draw_line(self):
+        print("--"*int(self.number_of_lines_horizontal+1))
+
+
+# class Single:
+#     def
 
 
 class MenuItem(Enum):
@@ -100,39 +101,61 @@ class CommandLine:
         self.validate_choice(generate_type_choice)
 
     def generate_type_choice(self):
+        clear()
         print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
         print("(3). Generate Password Image.")
 
-        while True:
-            try:
-                response = int(input("-> "))
-                if response > MenuItem.IMAGE.value:
-                    raise OutOfRange
-                break
-            except KeyboardInterrupt:
-                print("Closed")
-                exit()
-            except ValueError:
-                print("Please enter a number.")
-            except OutOfRange:
-                print("Please enter a value from 1-3.")
+        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.IMAGE.value)
 
-        return response
+    def card_line_choice(self):
+        clear()
+        print("Wie viele Reihen soll deine Passwort Karte haben? MAX: 26")
+        number_of_rows = self.validate_input(1, 26)
+        print("Wie viele Spalten soll deine Passwort Karte haben? MAX: 10")
+        number_of_columns = self.validate_input(1, 10)
+
+        return (number_of_rows, number_of_columns)
 
     def validate_choice(self, menu_choice):
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
             pass
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
-            c = Card(26,10)
-            c.console_card()
+            self.create_card()
         elif menu_choice == MenuItem.IMAGE.value:
             pass
         else:
             print("Command not found")
 
-# Höher als 25,9 geht nicht -> 9 und Z werden nicht angezeigt
+    # vlt. Validate Klasse
+    def validate_input(self, min_range_number, max_range_number):
+        while True:
+            try:
+                response = int(input("-> "))
+                if response > max_range_number:
+                    raise OutOfRange
+                break
+            except KeyboardInterrupt:
+                exit()
+            except ValueError:
+                print("Please enter a number.")
+            except OutOfRange:
+                print("Please enter a value from "+ str(min_range_number) +"-"+ str(max_range_number) +".")
+
+        return response
+
+    def create_card(self):
+        number_of_lines = self.card_line_choice()
+        c = Card(number_of_lines[0],number_of_lines[1])
+        c.console_card()
+
+def exit():
+    return sys.exit()
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
+
 def main():
     c = CommandLine()
     c.menu()
