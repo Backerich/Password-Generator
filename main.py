@@ -24,6 +24,25 @@ class Picker:
         return random_choice
 
 
+class Single:
+    def __init__(self, length):
+        self.length = length
+
+    def get_single_password(self):
+        p = Picker()
+        password = ""
+        for i in range(self.length):
+            # random_ascii = p.pick_random()
+            password += p.pick_random()
+        return password
+
+    def console_single(self):
+        clear()
+        password = self.get_single_password()
+        print("Your generated is:" + "\n" + str(password))
+
+
+
 class Card:
     def __init__(self, number_of_lines_horizontal = 0, number_of_lines_vertical = 0):
         self.list_of_ascii_uppercase = list(string.ascii_uppercase)
@@ -76,9 +95,8 @@ class Card:
         print("--"*int(self.number_of_lines_horizontal+1))
 
 
-# class Single:
-#     def
-
+class Image:
+    pass
 
 class MenuItem(Enum):
     SINGLE_CONSOLE = 1
@@ -120,7 +138,7 @@ class CommandLine:
 
     def validate_choice(self, menu_choice):
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
-            pass
+            self.create_single()
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
             self.create_card()
         elif menu_choice == MenuItem.IMAGE.value:
@@ -145,10 +163,18 @@ class CommandLine:
 
         return response
 
+    def create_single(self):
+        s = Single(10)
+        s.console_single()
+
     def create_card(self):
         number_of_lines = self.card_line_choice()
         c = Card(number_of_lines[0],number_of_lines[1])
         c.console_card()
+
+    def create_image(self):
+        i = Image()
+
 
 def exit():
     return sys.exit()
