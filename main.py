@@ -1,5 +1,15 @@
 import random as rn
 import string
+from enum import Enum
+import sys
+import os
+
+
+def exit():
+    return sys.exit()
+
+def clear():
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 class Picker:
@@ -34,7 +44,6 @@ class Card:
 
     def rescale_list(self, ascii_number, number_of_lines, list_of_content):
         number_of_lines = number_of_lines
-        print(list_of_content)
         if number_of_lines > ascii_number:
             number_of_lines = ascii_number
         n = ascii_number - number_of_lines
@@ -46,7 +55,6 @@ class Card:
         field = []
         p = Picker()
         counter = 0
-        # self.list_of_digits = list(string.digits)
         self.list_of_ascii_uppercase.insert(0, "/")
         for i in range(len(self.list_of_digits)):
             row = []
@@ -59,8 +67,7 @@ class Card:
         counter = 0
         return field
 
-    # TODO: letztes "\n" entfernen damit in der Konsole schöner aussieht
-    def print_card(self):
+    def console_card(self):
         field = self.field()
 
         print("--"*20)
@@ -72,12 +79,63 @@ class Card:
         print("--"*20)
 
 
-# class Generator:
+class MenuItem(Enum):
+    SINGLE_CONSOLE = 1
+    CARD_CONSOLE = 2
+    IMAGE = 3
+
+
+class OutOfRange(Exception):
+    pass
+
+
+class CommandLine:
+    # menu_Items = MenuItem()
+
+    def __init__(self):
+        pass
+
+    def menu(self):
+        generate_type_choice = self.generate_type_choice()
+        self.validate_choice(generate_type_choice)
+
+    def generate_type_choice(self):
+        print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
+        print("(1). Generate Single Line Password.")
+        print("(2). Generate Password Card.")
+        print("(3). Generate Password Image.")
+
+        while True:
+            try:
+                response = int(input("-> "))
+                if response > MenuItem.IMAGE.value:
+                    raise OutOfRange
+                break
+            except KeyboardInterrupt:
+                print("Closed")
+                exit()
+            except ValueError:
+                print("Please enter a number.")
+            except OutOfRange:
+                print("Please enter a value from 1-3.")
+
+        return response
+
+    def validate_choice(self, menu_choice):
+        if menu_choice == MenuItem.SINGLE_CONSOLE.value:
+            pass
+        elif menu_choice == MenuItem.CARD_CONSOLE.value:
+            c = Card(26,10)
+            c.console_card()
+        elif menu_choice == MenuItem.IMAGE.value:
+            pass
+        else:
+            print("Command not found")
 
 # Höher als 25,9 geht nicht -> 9 und Z werden nicht angezeigt
 def main():
-    c = Card(26,10)
-    c.print_card()
+    c = CommandLine()
+    c.menu()
 
 if __name__ == '__main__':
     main()
