@@ -3,6 +3,7 @@ import string
 from enum import Enum
 import sys
 import os
+from PIL import Image, ImageDraw
 
 
 class Picker:
@@ -95,8 +96,35 @@ class Card:
         print("--"*int(self.number_of_lines_horizontal+1))
 
 
-class Image:
-    pass
+class ImageCard:
+    def __init__(self):
+        self.image = self.make_image_card()
+
+    def make_image_card(self):
+        return Image.new("RGB", (512, 512), color="white")
+
+    def draw_text(self):
+        d = ImageDraw.Draw(self.image)
+        # d.text((10, 10), "Hello World", (73, 109, 137))
+        array = [["A", "B", "C", "A"], ["A", "B", "C", "B"], ["A", "B", "C", "C"], ["A", "B", "C", "D"]]
+
+        counter_column = 10
+        for i in array:
+            counter_row = 10
+            for j in i:
+                d.text((counter_row, counter_column), j, (73, 109, 137))
+                counter += 10
+            counter_row = 10
+            counter_column += 10
+
+    def save_image(self):
+        self.image.save("test.png")
+
+    def remove_old_image(self):
+        image_path = "./test.png"
+        if os.path.isfile(image_path):
+            os.remove(image_path)
+
 
 class MenuItem(Enum):
     SINGLE_CONSOLE = 1
@@ -149,7 +177,7 @@ class CommandLine:
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
             self.create_card()
         elif menu_choice == MenuItem.IMAGE.value:
-            pass
+            self.create_image_card()
         else:
             print("Command not found")
 
@@ -181,8 +209,11 @@ class CommandLine:
         c = Card(number_of_lines[0],number_of_lines[1])
         c.console_card()
 
-    def create_image(self):
-        i = Image()
+    def create_image_card(self):
+        i = ImageCard()
+        i.remove_old_image()
+        i.draw_text()
+        i.save_image()
 
 
 def exit():
