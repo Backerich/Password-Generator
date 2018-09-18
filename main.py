@@ -37,12 +37,6 @@ class Single:
             password += p.pick_random()
         return password
 
-    # vlt. eher in die CommandLine packen damit besser Logik von Output getrennt ist
-    def console_single(self):
-        clear()
-        password = self.get_single_password()
-        print("Your generated password is:" + "\n" + str(password))
-
 
 class Card:
     def __init__(self, number_of_lines_horizontal = 0, number_of_lines_vertical = 0):
@@ -157,7 +151,7 @@ class CommandLine:
 
     def validate_choice(self, menu_choice):
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
-            self.create_single()
+            self.create_single_console()
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
             self.create_card_console()
         elif menu_choice == MenuItem.IMAGE.value:
@@ -166,7 +160,6 @@ class CommandLine:
             print("Command not found")
 
     # vlt. Validate Klasse
-    # TODO: Range Optional machen
     def validate_input(self, min_range_number=1, max_range_number=1, range=True):
         while True:
             try:
@@ -183,10 +176,16 @@ class CommandLine:
 
         return response
 
-    def create_single(self):
+    def create_single_data(self):
         length = self.single_length_choice()
         s = Single(length)
-        s.console_single()
+        password = s.get_single_password()
+        return password
+
+    def create_single_console(self):
+        password = self.create_single_data()
+        clear()
+        print("Your generated password is:" + "\n" + str(password))
 
     def create_card_data(self):
         number_of_lines = self.card_line_choice()
