@@ -6,6 +6,10 @@ import os
 from PIL import Image, ImageDraw
 
 
+class OutOfRange(Exception):
+    pass
+
+
 class Utils:
     def exit(self):
         return sys.exit()
@@ -66,11 +70,11 @@ class Card:
         return list_of_content
 
     def data(self):
-        field = []
+        data = []
         p = Picker()
         counter = 0
         self.list_of_ascii_uppercase.insert(0, "/")
-        field.append(self.list_of_ascii_uppercase)
+        data.append(self.list_of_ascii_uppercase)
         for i in range(len(self.list_of_digits)):
             row = []
             for j in range(len(self.list_of_ascii_uppercase)-1):
@@ -78,13 +82,14 @@ class Card:
                 row.append(random_choice)
             row.insert(0, self.list_of_digits[counter])
             counter += 1
-            field.append(row)
+            data.append(row)
         counter = 0
-        return field
+        return data
 
 
 class ImageCard:
-    def __init__(self):
+    def __init__(self, data=[]):
+        self.data = data
         self.image = self.make_image_card()
 
     def make_image_card(self):
@@ -92,10 +97,9 @@ class ImageCard:
 
     def draw_text(self):
         d = ImageDraw.Draw(self.image)
-        array = [["A", "B", "C", "A"], ["A", "B", "C", "B"], ["A", "B", "C", "C"], ["A", "B", "C", "D"]]
-
+        
         counter_column = 10
-        for i in array:
+        for i in self.data:
             counter_row = 10
             for j in i:
                 d.text((counter_row, counter_column), j, (73, 109, 137))
@@ -116,10 +120,6 @@ class MenuItem(Enum):
     SINGLE_CONSOLE = 1
     CARD_CONSOLE = 2
     IMAGE = 3
-
-
-class OutOfRange(Exception):
-    pass
 
 
 class CommandLine(Utils):
@@ -214,7 +214,7 @@ class CommandLine(Utils):
 
     def create_card_image(self):
         data = self.create_card_data()
-        i = ImageCard()
+        i = ImageCard(data=data)
         i.remove_old_image()
         i.draw_text()
         i.save_image()
