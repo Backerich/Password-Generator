@@ -93,11 +93,11 @@ class ImageCard:
         self.image = self.make_image_card()
 
     def make_image_card(self):
-        return Image.new("RGB", (512, 512), color="white")
+        return Image.new("RGB", (290, 130), color="white")
 
     def draw_text(self):
         d = ImageDraw.Draw(self.image)
-        
+
         counter_column = 10
         for i in self.data:
             counter_row = 10
