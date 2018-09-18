@@ -136,7 +136,7 @@ class MenuItem(Enum):
     CARD_IMAGE = 4
 
 
-class Validate:
+class Validate(Utils):
     def validate_choice(self, menu_choice):
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
             self.create_single_console()
