@@ -41,13 +41,16 @@ class Single:
     def __init__(self, length):
         self.length = length
 
-    def get_single_password(self):
+    def data(self):
         p = Picker()
-        password = ""
+        # password = ""
+        data = []
+        password = []
         for i in range(self.length):
-            # random_ascii = p.pick_random()
-            password += p.pick_random()
-        return password
+            # password += p.pick_random()
+            password.append(p.pick_random())
+        data.append(password)
+        return data
 
 
 class Card:
@@ -126,10 +129,15 @@ class ImageMaker: # ImageMaker
         self.image.save("test.png")
 
 
+class Validate:
+    pass
+
+
 class MenuItem(Enum):
     SINGLE_CONSOLE = 1
     CARD_CONSOLE = 2
-    IMAGE = 3
+    SINGLE_IMAGE = 3
+    CARD_IMAGE = 4
 
 
 class CommandLine(Utils):
@@ -145,9 +153,10 @@ class CommandLine(Utils):
         print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
-        print("(3). Generate Password Image.")
+        print("(3). Generate Single Line Password Image.")
+        print("(4). Generate Password Card Image.")
 
-        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.IMAGE.value)
+        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.CARD_IMAGE.value)
 
     def card_line_choice(self):
         self.clear()
@@ -170,7 +179,9 @@ class CommandLine(Utils):
             self.create_single_console()
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
             self.create_card_console()
-        elif menu_choice == MenuItem.IMAGE.value:
+        elif menu_choice == MenuItem.SINGLE_IMAGE.value:
+            self.create_single_image()
+        elif menu_choice == MenuItem.CARD_IMAGE.value:
             self.create_card_image()
         else:
             print("Command not found")
@@ -195,11 +206,12 @@ class CommandLine(Utils):
     def create_single_data(self):
         length = self.single_length_choice()
         s = Single(length)
-        password = s.get_single_password()
-        return password
+        data = s.data()
+        return data
 
     def create_single_console(self):
-        password = self.create_single_data()
+        data = self.create_single_data()
+        password = "".join(data[0])
         self.clear()
         print("Your generated password is:" + "\n" + str(password))
 
@@ -233,7 +245,7 @@ class CommandLine(Utils):
         i.save_image()
 
     def draw_line_comsole(self, number_of_lines_horizontal):
-        print("--"*int(number_of_lines_horizontal+1))
+        print("--"*int(number_of_lines_horizontal))
 
 
 def main():
