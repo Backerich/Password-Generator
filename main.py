@@ -92,8 +92,17 @@ class ImageCard:
         self.data = data
         self.image = self.make_image_card()
 
+    def get_size(self):
+        row_length = len(self.data[0])
+        column_length = len(self.data)
+
+        row_size = 20 + (row_length*10)
+        column_size = 20 + (column_length*10)
+        return (row_size, column_size)
+
     def make_image_card(self):
-        return Image.new("RGB", (290, 130), color="white")
+        size = self.get_size()
+        return Image.new("RGB", size, color="white") # (290, 130)
 
     def draw_text(self):
         d = ImageDraw.Draw(self.image)
