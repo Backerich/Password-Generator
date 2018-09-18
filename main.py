@@ -129,10 +129,6 @@ class ImageMaker: # ImageMaker
         self.image.save("test.png")
 
 
-class Validate:
-    pass
-
-
 class MenuItem(Enum):
     SINGLE_CONSOLE = 1
     CARD_CONSOLE = 2
@@ -140,40 +136,7 @@ class MenuItem(Enum):
     CARD_IMAGE = 4
 
 
-class CommandLine(Utils):
-    def __init__(self):
-        pass
-
-    def menu(self):
-        generate_type_choice = self.generate_type_choice()
-        self.validate_choice(generate_type_choice)
-
-    def generate_type_choice(self):
-        self.clear()
-        print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
-        print("(1). Generate Single Line Password.")
-        print("(2). Generate Password Card.")
-        print("(3). Generate Single Line Password Image.")
-        print("(4). Generate Password Card Image.")
-
-        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.CARD_IMAGE.value)
-
-    def card_line_choice(self):
-        self.clear()
-        print("Wie viele Reihen soll deine Passwort Karte haben? MAX: 26")
-        number_of_rows = self.validate_input(1, 26)
-        print("Wie viele Spalten soll deine Passwort Karte haben? MAX: 10")
-        number_of_columns = self.validate_input(1, 10)
-
-        return (number_of_rows, number_of_columns)
-
-    def single_length_choice(self):
-        self.clear()
-        print("Wie lang soll dein Passwort sein?")
-        length = self.validate_input(range=False)
-
-        return length
-
+class Validate:
     def validate_choice(self, menu_choice):
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
             self.create_single_console()
@@ -202,6 +165,41 @@ class CommandLine(Utils):
                 print("Please enter a value from "+ str(min_range_number) +"-"+ str(max_range_number) +".")
 
         return response
+
+
+class CommandLine(Utils, Validate):
+    def __init__(self):
+        pass
+
+    def menu(self):
+        generate_type_choice = self.generate_type_choice()
+        self.validate_choice(generate_type_choice)
+
+    def generate_type_choice(self):
+        self.clear()
+        print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
+        print("(1). Generate Single Line Password.")
+        print("(2). Generate Password Card.")
+        print("(3). Generate Single Line Password Image.")
+        print("(4). Generate Password Card Image.")
+
+        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.CARD_IMAGE.value)
+
+    def card_line_choice(self):
+        self.clear()
+        print("Wie viele Reihen soll deine Passwort Karte haben? MAX: 26")
+        number_of_rows = self.validate_input(range=False)
+        print("Wie viele Spalten soll deine Passwort Karte haben? MAX: 10")
+        number_of_columns = self.validate_input(range=False)
+
+        return (number_of_rows, number_of_columns)
+
+    def single_length_choice(self):
+        self.clear()
+        print("Wie lang soll dein Passwort sein?")
+        length = self.validate_input(range=False)
+
+        return length
 
     def create_single_data(self):
         length = self.single_length_choice()
