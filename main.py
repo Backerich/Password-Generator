@@ -63,11 +63,12 @@ class Card:
             del list_of_content[-n:]
         return list_of_content
 
-    def field(self):
+    def data(self):
         field = []
         p = Picker()
         counter = 0
         self.list_of_ascii_uppercase.insert(0, "/")
+        field.append(self.list_of_ascii_uppercase)
         for i in range(len(self.list_of_digits)):
             row = []
             for j in range(len(self.list_of_ascii_uppercase)-1):
@@ -79,22 +80,6 @@ class Card:
         counter = 0
         return field
 
-    # vlt. eher in die CommandLine packen damit besser Logik von Output getrennt ist
-    def console_card(self):
-        field = self.field()
-
-        clear()
-        self.draw_line()
-        top_row = " ".join(self.list_of_ascii_uppercase)
-        print(top_row)
-        for i in field:
-            row_string = " ".join(i)
-            print(row_string)
-        self.draw_line()
-
-    def draw_line(self):
-        print("--"*int(self.number_of_lines_horizontal+1))
-
 
 class ImageCard:
     def __init__(self):
@@ -105,7 +90,6 @@ class ImageCard:
 
     def draw_text(self):
         d = ImageDraw.Draw(self.image)
-        # d.text((10, 10), "Hello World", (73, 109, 137))
         array = [["A", "B", "C", "A"], ["A", "B", "C", "B"], ["A", "B", "C", "C"], ["A", "B", "C", "D"]]
 
         counter_column = 10
@@ -113,7 +97,7 @@ class ImageCard:
             counter_row = 10
             for j in i:
                 d.text((counter_row, counter_column), j, (73, 109, 137))
-                counter += 10
+                counter_row += 10
             counter_row = 10
             counter_column += 10
 
@@ -175,9 +159,9 @@ class CommandLine:
         if menu_choice == MenuItem.SINGLE_CONSOLE.value:
             self.create_single()
         elif menu_choice == MenuItem.CARD_CONSOLE.value:
-            self.create_card()
+            self.create_card_console()
         elif menu_choice == MenuItem.IMAGE.value:
-            self.create_image_card()
+            self.create_card_image()
         else:
             print("Command not found")
 
@@ -204,16 +188,32 @@ class CommandLine:
         s = Single(length)
         s.console_single()
 
-    def create_card(self):
+    def create_card_data(self):
         number_of_lines = self.card_line_choice()
         c = Card(number_of_lines[0],number_of_lines[1])
-        c.console_card()
+        data = c.data()
+        return data
 
-    def create_image_card(self):
+    def create_card_console(self):
+        data = self.create_card_data()
+        number_of_lines_horizontal = len(data[0])
+
+        clear()
+        self.draw_line_comsole(number_of_lines_horizontal)
+        for i in data:
+            row_string = " ".join(i)
+            print(row_string)
+        self.draw_line_comsole(number_of_lines_horizontal)
+
+    def create_card_image(self):
+        data = self.create_card_data()
         i = ImageCard()
         i.remove_old_image()
         i.draw_text()
         i.save_image()
+
+    def draw_line_comsole(self, number_of_lines_horizontal):
+        print("--"*int(number_of_lines_horizontal+1))
 
 
 def exit():
