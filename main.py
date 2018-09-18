@@ -87,10 +87,11 @@ class Card:
         return data
 
 
-class ImageCard:
+class ImageMaker: # ImageMaker
     def __init__(self, data=[]):
         self.data = data
-        self.image = self.make_image_card()
+        self.image = self.make_image()
+        self.remove_old_image()
 
     def get_size(self):
         row_length = len(self.data[0])
@@ -100,7 +101,7 @@ class ImageCard:
         column_size = 20 + (column_length*10)
         return (row_size, column_size)
 
-    def make_image_card(self):
+    def make_image(self):
         size = self.get_size()
         return Image.new("RGB", size, color="white") # (290, 130)
 
@@ -116,13 +117,13 @@ class ImageCard:
             counter_row = 10
             counter_column += 10
 
-    def save_image(self):
-        self.image.save("test.png")
-
     def remove_old_image(self):
         image_path = "./test.png"
         if os.path.isfile(image_path):
             os.remove(image_path)
+
+    def save_image(self):
+        self.image.save("test.png")
 
 
 class MenuItem(Enum):
@@ -132,8 +133,6 @@ class MenuItem(Enum):
 
 
 class CommandLine(Utils):
-    # menu_Items = MenuItem()
-
     def __init__(self):
         pass
 
@@ -204,6 +203,12 @@ class CommandLine(Utils):
         self.clear()
         print("Your generated password is:" + "\n" + str(password))
 
+    def create_single_image(self):
+        data = self.create_single_data()
+        i = ImageMaker(data=data)
+        i.draw_text()
+        i.save_image()
+
     def create_card_data(self):
         number_of_lines = self.card_line_choice()
         c = Card(number_of_lines[0],number_of_lines[1])
@@ -223,8 +228,7 @@ class CommandLine(Utils):
 
     def create_card_image(self):
         data = self.create_card_data()
-        i = ImageCard(data=data)
-        i.remove_old_image()
+        i = ImageMaker(data=data)
         i.draw_text()
         i.save_image()
 
