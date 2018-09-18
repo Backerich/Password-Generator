@@ -128,28 +128,40 @@ class ImageMaker: # ImageMaker
     def save_image(self):
         self.image.save("test.png")
 
+class MenuTyp(Enum):
+    SINGLE = 1
+    CARD = 2
+
+class MenuFormat(Enum):
+    CONSOLE = 1
+    IMAGE = 2
 
 class MenuItem(Enum):
     SINGLE_CONSOLE = 1
-    CARD_CONSOLE = 2
-    SINGLE_IMAGE = 3
-    CARD_IMAGE = 4
+    SINGLE_IMAGE = 2
+    CARD_CONSOLE = 3
+    CARD_IMAGE = 4 # 2
 
 
 class Validate(Utils):
-    def validate_choice(self, menu_choice):
-        if menu_choice == MenuItem.SINGLE_CONSOLE.value:
+    def validate_menu(self, menu_typ, menu_format):
+        if menu_typ == MenuTyp.SINGLE.value and menu_format == MenuFormat.CONSOLE.value:
             self.create_single_console()
-        elif menu_choice == MenuItem.CARD_CONSOLE.value:
-            self.create_card_console()
-        elif menu_choice == MenuItem.SINGLE_IMAGE.value:
+        elif menu_typ == MenuTyp.SINGLE.value and menu_format == MenuFormat.IMAGE.value:
             self.create_single_image()
-        elif menu_choice == MenuItem.CARD_IMAGE.value:
+        elif menu_typ == MenuTyp.CARD.value and menu_format == MenuFormat.CONSOLE.value:
+            self.create_card_console()
+        elif menu_typ == MenuTyp.CARD.value and menu_format == MenuFormat.IMAGE.value:
             self.create_card_image()
         else:
             print("Command not found")
 
-    # vlt. Validate Klasse
+    # def validate_typ(self, typ):
+    #     if && menu_format == MenuTyp.SINGLE:.value:
+    #         validate_format(MenuTyp.SINGLE:.value)
+    #     elif typ == MenuTyp.CARD.value:
+    #         validate_fomat(MenuTyp.SINGLE:.value)
+
     def validate_input(self, min_range_number=1, max_range_number=1, range=True):
         while True:
             try:
@@ -167,23 +179,33 @@ class Validate(Utils):
         return response
 
 
-class CommandLine(Utils, Validate):
+class CommandLine(Validate):
     def __init__(self):
         pass
 
     def menu(self):
         generate_type_choice = self.generate_type_choice()
-        self.validate_choice(generate_type_choice)
+        generate_format_choice = self.generate_format_choice()
+        self.validate_menu(generate_type_choice, generate_format_choice)
 
     def generate_type_choice(self):
         self.clear()
         print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
+        # print("(1). Generate Single Line Password.")
+        # print("(2). Generate Single Line Password Image.")
+        # print("(3). Generate Password Card.")
+        # print("(4). Generate Password Card Image.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
-        print("(3). Generate Single Line Password Image.")
-        print("(4). Generate Password Card Image.")
 
-        return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.CARD_IMAGE.value)
+        return self.validate_input(MenuTyp.SINGLE.value, MenuTyp.CARD.value)
+
+    def generate_format_choice(self):
+        print("Bitte wähle einen Menüpunkt aus um den Ausgabetyp anzugeben indem du die vorranstehende Zahl angibst.")
+        print("(1). Output in Console.")
+        print("(2). Output in Image.")
+
+        return self.validate_input(MenuFormat.CONSOLE.value, MenuFormat.IMAGE.value)
 
     def card_line_choice(self):
         self.clear()
