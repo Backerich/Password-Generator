@@ -6,6 +6,14 @@ import os
 from PIL import Image, ImageDraw
 
 
+class Utils:
+    def exit(self):
+        return sys.exit()
+
+    def clear(self):
+        os.system("cls" if os.name == "nt" else "clear")
+
+
 class Picker:
     list_of_ASCII = list(string.printable)
 
@@ -114,7 +122,7 @@ class OutOfRange(Exception):
     pass
 
 
-class CommandLine:
+class CommandLine(Utils):
     # menu_Items = MenuItem()
 
     def __init__(self):
@@ -125,7 +133,7 @@ class CommandLine:
         self.validate_choice(generate_type_choice)
 
     def generate_type_choice(self):
-        clear()
+        self.clear()
         print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
@@ -134,7 +142,7 @@ class CommandLine:
         return self.validate_input(MenuItem.SINGLE_CONSOLE.value, MenuItem.IMAGE.value)
 
     def card_line_choice(self):
-        clear()
+        self.clear()
         print("Wie viele Reihen soll deine Passwort Karte haben? MAX: 26")
         number_of_rows = self.validate_input(1, 26)
         print("Wie viele Spalten soll deine Passwort Karte haben? MAX: 10")
@@ -143,7 +151,7 @@ class CommandLine:
         return (number_of_rows, number_of_columns)
 
     def single_length_choice(self):
-        clear()
+        self.clear()
         print("Wie lang soll dein Passwort sein?")
         length = self.validate_input(range=False)
 
@@ -168,7 +176,7 @@ class CommandLine:
                     raise OutOfRange
                 break
             except KeyboardInterrupt:
-                exit()
+                self.exit()
             except ValueError:
                 print("Please enter a number.")
             except OutOfRange:
@@ -184,7 +192,7 @@ class CommandLine:
 
     def create_single_console(self):
         password = self.create_single_data()
-        clear()
+        self.clear()
         print("Your generated password is:" + "\n" + str(password))
 
     def create_card_data(self):
@@ -197,7 +205,7 @@ class CommandLine:
         data = self.create_card_data()
         number_of_lines_horizontal = len(data[0])
 
-        clear()
+        self.clear()
         self.draw_line_comsole(number_of_lines_horizontal)
         for i in data:
             row_string = " ".join(i)
@@ -214,12 +222,6 @@ class CommandLine:
     def draw_line_comsole(self, number_of_lines_horizontal):
         print("--"*int(number_of_lines_horizontal+1))
 
-
-def exit():
-    return sys.exit()
-
-def clear():
-    os.system("cls" if os.name == "nt" else "clear")
 
 def main():
     c = CommandLine()
