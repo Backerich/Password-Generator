@@ -4,5 +4,5 @@ The output type is either an image (only for password cards) or a good old conso
 
 ## Links:
 ### Image Links:
-Pillow Reference: https://pillow.readthedocs.io/en/5.2.x/reference/index.html
-Pillow Tutorial: https://code-maven.com/create-images-with-python-pil-pillow
+* Pillow Reference: https://pillow.readthedocs.io/en/5.2.x/reference/index.html
+* Pillow Tutorial: https://code-maven.com/create-images-with-python-pil-pillow
