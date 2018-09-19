@@ -6,3 +6,6 @@ The output type is either an image (only for password cards) or a good old conso
 ### Image Links:
 * Pillow Reference: https://pillow.readthedocs.io/en/5.2.x/reference/index.html
 * Pillow Tutorial: https://code-maven.com/create-images-with-python-pil-pillow
+
+## Dependencies
+1. Pillow 5.2.0
