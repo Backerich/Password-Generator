@@ -3,7 +3,7 @@ import string
 from enum import Enum
 import sys
 import os
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 
 class OutOfRange(Exception):
@@ -110,12 +110,13 @@ class ImageMaker: # ImageMaker
 
     def draw_text(self):
         d = ImageDraw.Draw(self.image)
+        # font = ImageFont.truetype("arial.ttf", 15)
 
         counter_column = 10
         for i in self.data:
             counter_row = 10
             for j in i:
-                d.text((counter_row, counter_column), j, (73, 109, 137))
+                d.text((counter_row, counter_column), j, (73, 109, 137)) # , font=font
                 counter_row += 10
             counter_row = 10
             counter_column += 10
@@ -156,12 +157,6 @@ class Validate(Utils):
         else:
             print("Command not found")
 
-    # def validate_typ(self, typ):
-    #     if && menu_format == MenuTyp.SINGLE:.value:
-    #         validate_format(MenuTyp.SINGLE:.value)
-    #     elif typ == MenuTyp.CARD.value:
-    #         validate_fomat(MenuTyp.SINGLE:.value)
-
     def validate_input(self, min_range_number=1, max_range_number=1, range=True):
         while True:
             try:
@@ -191,10 +186,6 @@ class CommandLine(Validate):
     def generate_type_choice(self):
         self.clear()
         print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
-        # print("(1). Generate Single Line Password.")
-        # print("(2). Generate Single Line Password Image.")
-        # print("(3). Generate Password Card.")
-        # print("(4). Generate Password Card Image.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
 
