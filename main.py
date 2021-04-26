@@ -122,12 +122,12 @@ class ImageMaker: # ImageMaker
             counter_column += 10
 
     def remove_old_image(self):
-        image_path = "./test.png"
+        image_path = "./password.png"
         if os.path.isfile(image_path):
             os.remove(image_path)
 
     def save_image(self):
-        self.image.save("test.png")
+        self.image.save("password.png")
 
 class MenuTyp(Enum):
     SINGLE = 1
@@ -185,14 +185,14 @@ class CommandLine(Validate):
 
     def generate_type_choice(self):
         self.clear()
-        print("Bitte wähle einen Menüpunkt aus indem du die vorranstehende Zahl angibst.")
+        print("Please choose one of the following options by providing the respective number.")
         print("(1). Generate Single Line Password.")
         print("(2). Generate Password Card.")
 
         return self.validate_input(MenuTyp.SINGLE.value, MenuTyp.CARD.value)
 
     def generate_format_choice(self):
-        print("Bitte wähle einen Menüpunkt aus um den Ausgabetyp anzugeben indem du die vorranstehende Zahl angibst.")
+        print("Please choose one of the following options to specify the output type by providing the respective number.")
         print("(1). Output in Console.")
         print("(2). Output in Image.")
 
@@ -200,16 +200,16 @@ class CommandLine(Validate):
 
     def card_line_choice(self):
         self.clear()
-        print("Wie viele Reihen soll deine Passwort Karte haben? MAX: 26")
+        print("How many rows should your password card consist of? MAX: 26")
         number_of_rows = self.validate_input(range=False)
-        print("Wie viele Spalten soll deine Passwort Karte haben? MAX: 10")
+        print("How many columns should your password card consist of? MAX: 10")
         number_of_columns = self.validate_input(range=False)
 
         return (number_of_rows, number_of_columns)
 
     def single_length_choice(self):
         self.clear()
-        print("Wie lang soll dein Passwort sein?")
+        print("How long should your password be?")
         length = self.validate_input(range=False)
 
         return length
